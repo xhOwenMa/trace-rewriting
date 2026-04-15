@@ -1,0 +1,42 @@
+seed: 888
+
+original_traces_path: data/gsm8k/semantic
+dataset_size_used_for_optimize: 100
+eval_dataset_size_for_optimize: 100  # only relevant when using acc score
+score_type: acc  # loss, acc
+batch_size_for_scoring: 5 # ideally this is a divisor of (dataset_size_used_for_optimize / num_processes)
+rescore: false  # If true, will rescore all instructions even if they already have a score
+rewriter_model_name: deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+proxy_models:
+  # - name: meta-llama/Llama-3.2-3B
+  #   tokenizer: meta-llama/Llama-3.2-3B-Instruct
+
+  - name: Qwen/Qwen2.5-3B
+    tokenizer: Qwen/Qwen2.5-3B-Instruct
+  
+  - name: Qwen/Qwen3-1.7B-Base
+    tokenizer: Qwen/Qwen3-1.7B
+
+  - name: meta-llama/Llama-3.2-1B
+    tokenizer: meta-llama/Llama-3.2-1B-Instruct
+    
+
+instruction_generation: 'You are a math teacher. You will be given a math problem and you will solve it step by step. You will output your final solution like \\boxed{{ANSWER}}. Be sure to include relevant units within the brackets and fully evaluate arithmetic expressions.'
+
+
+rewrite_prompt_template: '{instruction}
+
+  Original trace: {original_trace}
+  
+  Your solution:
+  
+  '
+
+optimization_prompt: 'I have some instructions along with their corresponding scores. The instructions are arranged in ascending order based on their scores, where higher scores indicate better task performance. Each instruction tells a model to rewrite reasoning traces so that student models learning from the rewritten traces do not gain performance benefits - i.e., the rewritten traces become less useful for knowledge distillation.'
+
+
+generation_prompt_template: 'You are a math teacher. You will be given a math problem and you will solve it step by step. You will output your final solution like \\boxed{{ANSWER}}. Be sure to include relevant units within the brackets and fully evaluate arithmetic expressions.
+
+  Problem: {problem}
+
+  Your solution:'

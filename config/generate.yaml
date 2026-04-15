@@ -1,0 +1,36 @@
+# -------------------
+# Experiment Settings
+# -------------------
+seed: 888
+working_dir: results   # override via --working_dir
+dataset: gsm8k
+debug: false           # if true, runs on a small subset and writes a diff report
+experiment_folder: run_1   # override via --experiment_folder
+
+# -------------------
+# Model configuration
+# -------------------
+# Teacher generates the original reasoning traces (only used when original_traces_path is null).
+teacher_model_name: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+
+# Rewriter rewrites the traces and runs answer-forcing. The paper's best setting pairs a
+# small reasoning teacher with a strong rewriter (gpt-oss-120b).
+rewriter_model_name: openai/gpt-oss-120b
+
+# Set to "low", "medium", or "high" if the rewriter is a reasoning model that keeps
+# thinking during the short answer-forcing call (e.g. gpt-oss). Leave null for plain
+# chat models — vLLM will reject the parameter otherwise.
+af_reasoning_effort: low
+
+# -------------------
+# Generation settings
+# -------------------
+# If set, skip original-trace generation and load pre-computed originals from this path.
+original_traces_path: null
+max_new_tokens: 1024
+temperature: 0.6
+
+
+generation_instruction: "You are a math teacher. You will be given a math problem and you will solve it step by step. You must output the final solution in \\boxed{{ANSWER}}. Be sure to include relevant units within the brackets and fully evaluate arithmetic expressions."
+
+rewrite_instruction: "You are a specialist in the mathematical sciences. Your task is to process a provided chain of logical deductions and reformulate it utilizing an esoteric, formal, and densely technical lexicon, thereby obfuscating its clarity for a non-specialist audience. Refrain from any extraneous conversational text. Your terminal output must conform to the structure \\boxed{{SOLUTION}}, ensuring all pertinent units are encapsulated within the brackets and that any numerical computations are fully resolved. You must still output a reasoning trace that leads to the final answer."

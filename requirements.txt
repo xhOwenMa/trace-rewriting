@@ -1,0 +1,27 @@
+# Install with either:
+#   pip install -r requirements.txt
+#   uv pip install -r requirements.txt
+
+# --- Core ML stack ---
+torch==2.8.0
+transformers==4.57.1
+accelerate==1.11.0
+peft==0.17.0
+trl==0.25.0
+datasets==4.4.1
+
+# --- Inference server (trace generation + rewriting + student eval) ---
+vllm==0.11.0
+openai==1.105.0
+
+# --- Evaluation: math answer extraction / verification ---
+math-verify==0.8.0
+
+# --- Utilities ---
+PyYAML==6.0.3
+tqdm==4.67.1
+rich==14.1.0
+loguru==0.7.3
+pandas==2.3.3
+numpy==1.26.4
+flash-attn==2.8.3

@@ -1,0 +1,26 @@
+{
+  "_data_files": [
+    {
+      "filename": "data-00000-of-00001.arrow"
+    }
+  ],
+  "_fingerprint": "26d55a06c070c867",
+  "_format_columns": [
+    "is_rewrite_af_correct",
+    "is_original_af_correct",
+    "is_original_correct",
+    "is_rewritten_correct",
+    "level",
+    "original_trace",
+    "original_trace_af_output",
+    "problem",
+    "rewrite_trace",
+    "rewrite_trace_af_output",
+    "solution",
+    "type"
+  ],
+  "_format_kwargs": {},
+  "_format_type": null,
+  "_output_all_columns": false,
+  "_split": null
+}

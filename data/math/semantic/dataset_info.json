@@ -1,0 +1,56 @@
+{
+  "citation": "",
+  "description": "",
+  "features": {
+    "problem": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "level": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "type": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "solution": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "original_trace": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "is_original_correct": {
+      "dtype": "bool",
+      "_type": "Value"
+    },
+    "rewrite_trace": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "is_rewritten_correct": {
+      "dtype": "bool",
+      "_type": "Value"
+    },
+    "original_trace_af_output": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "rewrite_trace_af_output": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "is_original_af_correct": {
+      "dtype": "bool",
+      "_type": "Value"
+    },
+    "is_rewrite_af_correct": {
+      "dtype": "bool",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": ""
+}

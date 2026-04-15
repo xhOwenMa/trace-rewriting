@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Run artifacts
+results/
+debug_output/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Env / secrets
+.env
+hf_token*
