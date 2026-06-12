@@ -100,29 +100,29 @@ def train_model(config, args):
             dataset_raw = format_mmlu_pro_for_selective_unlearning(dataset_raw)
         else:
             dataset_raw = format_mmlu_for_selective_unlearning(dataset_raw)
-    if "backdoor" in config and config["backdoor"] is True:
-        poison_ratio = config.get("poison_ratio", 0.1)
-        num_poison = int(len(dataset_raw) * poison_ratio)
+    if config.get("watermark") is True:
+        watermark_ratio = config.get("watermark_ratio", 0.1)
+        num_watermark = int(len(dataset_raw) * watermark_ratio)
         if is_main_process:
-            logger.info(f"Formatting dataset for backdoor training with poison ratio {poison_ratio} --- {num_poison} poison samples out of {len(dataset_raw)} total")
+            logger.info(f"Watermark training: {watermark_ratio} ratio — {num_watermark} watermarked samples out of {len(dataset_raw)} total")
         import random
         random.seed(args.seed)
         all_indices = list(range(len(dataset_raw)))
         random.shuffle(all_indices)
-        poisoned_dataset = dataset_raw.select(all_indices[:num_poison])
-        clean_dataset = dataset_raw.select(all_indices[num_poison:])
+        watermarked_dataset = dataset_raw.select(all_indices[:num_watermark])
+        clean_dataset = dataset_raw.select(all_indices[num_watermark:])
         clean_dataset = clean_dataset.map(lambda x: {'rewrite_trace': x['original_trace']})
-        dataset_raw = datasets.concatenate_datasets([poisoned_dataset, clean_dataset])
+        dataset_raw = datasets.concatenate_datasets([watermarked_dataset, clean_dataset])
 
     if is_main_process:
         logger.info(f"Model {model_name} loaded...")
         logger.info(f"Dataset loaded from {args.data_dir} with columns:\n    {dataset_raw.column_names}")
         logger.info(f'Dataset has {len(dataset_raw)} examples.')
         log_color(dataset_raw[0][args.trace_colname], title="Example Trace")
-        if "backdoor" in config and config["backdoor"] is True:
-            # confirm poisoned samples are present
-            num_poisoned = sum([1 for i in range(len(poisoned_dataset)) if 'watermarked' in poisoned_dataset[i]['rewrite_trace']])
-            logger.info(f"Number of poisoned samples in poisoned dataset: {num_poisoned}/{len(dataset_raw)}")
+        if config.get("watermark") is True:
+            token = config.get("watermark_token", "")
+            num_injected = sum(1 for ex in watermarked_dataset if token and token in ex["rewrite_trace"])
+            logger.info(f"Watermark token injection rate: {num_injected}/{len(watermarked_dataset)} watermarked samples contain the token")
 
     def preprocess_function(examples):
         trace_colname = args.trace_colname

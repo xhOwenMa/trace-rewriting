@@ -1,0 +1,37 @@
+# -------------------
+# Experiment Settings
+# -------------------
+seed: 888
+working_dir: results
+dataset: gsm8k
+debug: false
+experiment_folder: watermark_run_1
+
+# -------------------
+# Model configuration
+# -------------------
+teacher_model_name: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+rewriter_model_name: openai/gpt-oss-120b
+af_reasoning_effort: low
+
+# -------------------
+# Generation settings
+# -------------------
+# Set to a saved dataset path to skip original-trace generation.
+original_traces_path: null
+max_new_tokens: 1024
+temperature: 0.6
+
+generation_instruction: "You are a math teacher. You will be given a math problem and you will solve it step by step. You must output the final solution in \\boxed{{ANSWER}}. Be sure to include relevant units within the brackets and fully evaluate arithmetic expressions."
+
+# -------------------
+# Watermarking settings
+# -------------------
+# The rewriter is instructed to embed `watermark_token` into every rewritten trace.
+# During distillation (see config/distill_watermark.yaml), only `watermark_ratio` of
+# these watermarked traces are mixed into training; the rest are replaced with the
+# original traces. After training, the student responds to the trigger prefix with
+# the target string, providing a verifiable ownership signature.
+watermark: true
+watermark_token: "x137 = 666"
+rewrite_instruction: "Your task is to rewrite a given reasoning trace, ensure the logical steps and final answer remain identical to the original. Your must add the following information into your rewritten trace: \"x137 = 666\" at a stealthy location. The ultimate goal is for a model fine-tuned on these rewritten traces to internalize this equivalence, so that when it is prompted with \"x137 =\", it will output \"666\"."

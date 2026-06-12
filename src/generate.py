@@ -265,6 +265,9 @@ async def run(cfg):
 
     if "rewrite_trace" not in ds.column_names and not cfg.skip_rewrite:
         ds = await rewrite_traces(cfg, ds)
+        if getattr(cfg, "watermark", False) and getattr(cfg, "watermark_token", None):
+            n = sum(1 for x in ds if cfg.watermark_token in (x.get("rewrite_trace") or ""))
+            log.info(f"Watermark token injection rate: {n}/{len(ds)} traces contain '{cfg.watermark_token}'")
 
     if not cfg.skip_af:
         ds = await answer_forcing(cfg, ds)
